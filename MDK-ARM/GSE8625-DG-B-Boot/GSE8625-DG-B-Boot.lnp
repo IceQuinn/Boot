@@ -2,6 +2,7 @@
 "gse8625-dg-b-boot\startup_stm32f412rx.o"
 "gse8625-dg-b-boot\main.o"
 "gse8625-dg-b-boot\gpio.o"
+"gse8625-dg-b-boot\dma.o"
 "gse8625-dg-b-boot\usart.o"
 "gse8625-dg-b-boot\stm32f4xx_it.o"
 "gse8625-dg-b-boot\stm32f4xx_hal_msp.o"

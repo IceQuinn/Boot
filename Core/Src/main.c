@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -86,9 +87,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
+//  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
+  HAL_UART_Transmit_DMA(&huart2, buf, sizeof(buf));
+  HAL_UART_Transmit_DMA(&huart1, buf, sizeof(buf));
 
   /* USER CODE END 2 */
 
@@ -96,6 +101,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  
+	  HAL_Delay(1000);
+//	  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
+	  HAL_UART_Transmit_DMA(&huart2, buf, sizeof(buf));
+	  HAL_UART_Transmit_DMA(&huart1, buf, sizeof(buf));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

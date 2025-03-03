@@ -29,5 +29,6 @@ gse8625-dg-b-boot\main.o: C:/Users/mutou/STM32Cube/Repository/STM32Cube_FW_F4_V1
 gse8625-dg-b-boot\main.o: C:/Users/mutou/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.2/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 gse8625-dg-b-boot\main.o: C:/Users/mutou/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.2/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 gse8625-dg-b-boot\main.o: C:/Users/mutou/STM32Cube/Repository/STM32Cube_FW_F4_V1.26.2/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+gse8625-dg-b-boot\main.o: ../Core/Inc/dma.h
 gse8625-dg-b-boot\main.o: ../Core/Inc/usart.h
 gse8625-dg-b-boot\main.o: ../Core/Inc/gpio.h
