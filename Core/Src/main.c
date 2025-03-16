@@ -65,8 +65,10 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
-	uint8_t buf[] = "Hello World\r\n";
+	uint8_t uart1_buf[] = "Hello Uart1\r\n";
+	uint8_t uart2_buf[] = "Hello Uart2\r\n";
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -92,8 +94,8 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 //  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
-  HAL_UART_Transmit_DMA(&huart2, buf, sizeof(buf));
-  HAL_UART_Transmit_DMA(&huart1, buf, sizeof(buf));
+  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
+  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
 
   /* USER CODE END 2 */
 
@@ -104,8 +106,8 @@ int main(void)
 	  
 	  HAL_Delay(1000);
 //	  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
-	  HAL_UART_Transmit_DMA(&huart2, buf, sizeof(buf));
-	  HAL_UART_Transmit_DMA(&huart1, buf, sizeof(buf));
+	  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
+	  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -126,6 +128,7 @@ void SystemClock_Config(void)
   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -142,6 +145,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -192,5 +196,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

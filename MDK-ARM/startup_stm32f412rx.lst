@@ -670,13 +670,12 @@ ARM Macro Assembler    Page 11
               00000000 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=gse8625-dg-b-boot\startup_stm32f412rx.d -ogse8625-dg-b-boot\
-startup_stm32f412rx.o -I.\RTE\_GSE8625-DG-B-Boot -ID:\Keil5\Pack\ARM\CMSIS\5.7.
-0\CMSIS\Core\Include -ID:\Keil5\Pack\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\De
-vice\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISIO
-N_VERSION SETA 533" --predefine="_RTE_ SETA 1" --predefine="STM32F412Rx SETA 1"
- --predefine="_RTE_ SETA 1" --list=startup_stm32f412rx.lst startup_stm32f412rx.
-s
+interwork --depend=.\gse8625-dg-b-boot\startup_stm32f412rx.d -o.\gse8625-dg-b-b
+oot\startup_stm32f412rx.o -I.\RTE\_GSE8625-DG-B-Boot -ID:\APP\Keil_v5\Arm\Packs
+\ARM\CMSIS\5.7.0\CMSIS\Core\Include --predefine="__MICROLIB SETA 1" --predefine
+="__UVISION_VERSION SETA 532" --predefine="_RTE_ SETA 1" --predefine="STM32F412
+Rx SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f412rx.lst startup_st
+m32f412rx.s
 
 
 
