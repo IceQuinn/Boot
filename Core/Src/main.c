@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "version.h"
+#include "my_printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +69,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	uint8_t uart1_buf[] = "Hello Uart1\r\n";
-	uint8_t uart2_buf[] = "Hello Uart2\r\n";
+//	uint8_t uart2_buf[] = "Hello Uart2\r\n";
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -94,8 +95,10 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 //  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
-  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
-  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
+//  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
+//  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
+	
+	MyPrintf("NiHao%d\r\n", 123);
 
   /* USER CODE END 2 */
 
@@ -106,7 +109,7 @@ int main(void)
 	  
 	  HAL_Delay(1000);
 //	  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
-	  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
+//	  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
 	  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
     /* USER CODE END WHILE */
 
