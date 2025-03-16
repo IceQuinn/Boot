@@ -94,6 +94,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	show_ctu_msg();
 //  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
 //  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
 //  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
