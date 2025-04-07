@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -27,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "version.h"
 #include "my_printf.h"
+#include "uart_mgmt.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,10 +90,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	
+	Uart_Mgmt_Init();
 	
 	show_ctu_msg();
 //  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
@@ -109,10 +110,12 @@ int main(void)
   while (1)
   {
 	  
-	  HAL_Delay(1000);
+//	  HAL_Delay(1000);
 //	  HAL_UART_Transmit(&huart2, buf, sizeof(buf), 1000);
 //	  HAL_UART_Transmit_DMA(&huart2, uart2_buf, sizeof(uart2_buf));
-	  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
+//	  HAL_UART_Transmit_DMA(&huart1, uart1_buf, sizeof(uart1_buf));
+		
+		Uart_RxBuf_Check();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

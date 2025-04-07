@@ -8,6 +8,8 @@
 
 #define TX_BUF_LEN  256     /* 发送缓冲区容量，根据需要进行调整 */
 uint8_t TxBuf[TX_BUF_LEN];  /* 发送缓冲区                       */
+
+uint8_t g_Send_Flg = 0;
 void MyPrintf(const char *__format, ...)
 {
   va_list ap;
@@ -22,7 +24,17 @@ void MyPrintf(const char *__format, ...)
   int len = strlen((const char*)TxBuf);
   
   /* 往串口发送数据 */
-  HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&TxBuf, len);
+//  HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&TxBuf, len);
+	HAL_UART_Transmit(&huart2, (uint8_t*)&TxBuf, len, 1000);
+
 }
 
 
+uint8_t aa;
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &huart2)
+	{
+		aa++;
+	}
+}
