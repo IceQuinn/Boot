@@ -1584,6 +1584,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\app\uart_mgmt.c</FilePath>
             </File>
+            <File>
+              <FileName>protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\app\protocol.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1593,6 +1598,16 @@
               <FileName>my_printf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserDrv\my_printf.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserDrv\crc8.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserDrv\crc32.c</FilePath>
             </File>
           </Files>
         </Group>

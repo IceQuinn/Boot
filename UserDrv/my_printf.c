@@ -38,3 +38,16 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 		aa++;
 	}
 }
+
+void show_arr(char* name, void* data, int len)
+{
+    MyPrintf("[%08d]:", HAL_GetTick());
+
+    char * ptr = (char *)data;
+    MyPrintf("%s[%d] = 0x", name, len);
+    for(int i=0; i<len; i++)
+        MyPrintf("%02x ", ptr[i]);
+    MyPrintf("\r\n");
+
+    return;
+}

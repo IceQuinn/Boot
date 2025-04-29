@@ -1,7 +1,9 @@
 #include "uart_mgmt.h"
 #include "usart.h"
+#include "my_printf.h"
+#include "protocol.h"
 
-#define BUFFER_SIZE	512
+#define BUFFER_SIZE	1024
 uint8_t rx_buffer[BUFFER_SIZE];
 uint16_t rx_len;
 uint8_t recv_end_flag;
@@ -24,11 +26,10 @@ void Uart_Mgmt_Init(void)
 }
 
 
-void Uart_IDLE_RxCallback(uint16_t DMA_Idx)
+void Uart_Send(void *pbuf, uint16_t len)
 {
-	rx_len =  BUFFER_SIZE - DMA_Idx; //总计数减去未传输的数据个数，得到已经接收的数据个数
-	HAL_UART_Receive_DMA(&huart1, rx_buffer, BUFFER_SIZE);
-	recv_end_flag = 1;	// 接受完成标志位置1
+	uint8_t *p = (uint8_t *)pbuf;
+	HAL_UART_Transmit(&huart1, p, len, 1000);	// 发送数据
 }
 
 
@@ -36,14 +37,16 @@ void Uart_RxBuf_Check_SHAKE_HANDS(void)
 {
 	static uint8_t z_count = 0;
 
-	if(rx_buffer[0] == 'z')
+	if(rx_buffer[0] == 'Z')
 	{
 		z_count++;
 		if(z_count >= 3)
 		{
+			HAL_UART_Transmit(&huart1, (uint8_t *)"AAA", 3, 100);	// 接收到数据马上使用串口1发送出去
 			uart_state = HEAD_HANDS;	// 握手成功，进入头部阶段
 			z_count = 0;				// 重置计数器
-			HAL_UART_Transmit(&huart1, (uint8_t *)"AAA", 3, 100);	// 接收到数据马上使用串口1发送出去
+			HAL_UART_Receive_IT(&huart1, rx_buffer, 17);		// 重新使能串口1接收中断
+			return ;
 		}
 	}
 	else
@@ -51,26 +54,22 @@ void Uart_RxBuf_Check_SHAKE_HANDS(void)
 		z_count = 0;					// 非'z'字符，重置计数器
 		uart_state = SHAKE_HANDS;		// 握手失败，重新进入握手阶段
 	}
+	HAL_UART_Receive_IT(&huart1, rx_buffer, 1);		// 重新使能串口1接收中断
 }
 
+
+uint8_t Head_Pack[1024];
+uint8_t Head_pack_idx;
+uint32_t Head_pack_idx_idle_Tcik = 0;
 void Uart_RxBuf_Check_HEAD_HANDS(void)
 {
-//	uint32_t tmp_flag = 0;
-//	uint32_t temp;
-//	tmp_flag =__HAL_UART_GET_FLAG(&huart1,UART_FLAG_IDLE); //获取IDLE标志位
-//	if((tmp_flag != RESET))//idle标志被置位
-//	{ 
-//		__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除标志位
-//		//temp = huart1.Instance->SR;  //清除状态寄存器SR,读取SR寄存器可以实现清除SR寄存器的功能
-//		//temp = huart1.Instance->DR; //读取数据寄存器中的数据
-//		//这两句和上面那句等效
-//		HAL_UART_DMAStop(&huart1); //  停止DMA传输，防止
-//		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);// 获取DMA中未传输的数据个数   
-//		//temp  = hdma_usart1_rx.Instance->NDTR;// 读取NDTR寄存器，获取DMA中未传输的数据个数，
-//		
-//		Uart_IDLE_RxCallback(temp);
-
-//	 }
+	if(Head_pack_idx < 1024)
+	{
+		Head_pack_idx_idle_Tcik = HAL_GetTick();	// 记录接收数据的时间戳
+		Head_Pack[Head_pack_idx] = rx_buffer[0];
+		Head_pack_idx++;
+		
+	}
 }
 
 
@@ -84,6 +83,11 @@ void Uart1_IRQHandler(void)
 		break;
 	case HEAD_HANDS:
 		Uart_RxBuf_Check_HEAD_HANDS();
+		HAL_UART_Receive_IT(&huart1, rx_buffer, 17);		// 重新使能串口1接收中断
+		break;
+	case DATA_HANDS:
+		Uart_RxBuf_Check_HEAD_HANDS();
+		HAL_UART_Receive_IT(&huart1, rx_buffer, 519);		// 重新使能串口1接收中断
 		break;
 	
 	default:
@@ -96,10 +100,34 @@ void Uart1_IRQHandler(void)
 
 
 
-
 void Uart_RxBuf_Check(void)
 {
+	if((HAL_GetTick() - Head_pack_idx_idle_Tcik > 100) && (Head_pack_idx))	// 0.1秒内没有接收到数据，认为数据接收完成
+	{
+		switch (uart_state)
+		{
+		case SHAKE_HANDS:
+			break;
+		case HEAD_HANDS:
+			Hand_Pack_Write(Head_Pack, Head_pack_idx);	// 处理接收到的数据包
+			Head_pack_idx = 0;	// 清空数据包索引
+			Hand_Pack_Deal();	// 处理接收到的数据包
+			break;
+		case DATA_HANDS:
+			Updata_Pack_Write(Head_Pack, Head_pack_idx);	// 处理接收到的数据包
+			Head_pack_idx = 0;	// 清空数据包索引
+			Updata_Pack_Deal();	// 处理接收到的数据包
+			break;
+		default:
+			break;
+		}
+	
 
+
+		
+		
+
+	}
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -107,6 +135,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if(&huart1 == huart)
 	{
 			Uart1_IRQHandler();
-			HAL_UART_Receive_IT(&huart1, rx_buffer, 1);		// 重新使能串口1接收中断
+			
 	}
 }
